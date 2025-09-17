@@ -66,6 +66,26 @@
       border: 2px solid #3dca6d;
       background-color: #3dca6d;
     }
+  .github-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 18px;
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+    background-color: #3dca6d;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .github-link:hover {
+    background-color: #35b85c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  }
   </style>
 </head>
 <body>
@@ -73,8 +93,8 @@
   <h1>Enter Molecule Formula</h1>
 
   <!-- Add this inside <body>, probably near your canvas -->
-  <img id="helpScreen" src="https://i.imgur.com/ZZAhVEK.png" alt="Help Screen" 
-     style="position: fixed; top: 400; left:100; width:50%; height:50%; 
+  <img id="helpScreen" src="https://i.imgur.com/MbzYejH.png" alt="Help Screen" 
+     style="position: fixed; top: 6000; left:100; width:50%; height:50%; 
             object-fit: contain; 
             display: none; z-index: 1000; cursor: pointer;">
 
@@ -84,9 +104,14 @@
     <button type="button" id="prevIsomer" style="visibility: hidden;">Previous Isomer</button>
     <button type="button" id="nextIsomer" style="visibility: hidden;">Next Isomer</button>
     <button id="helpButton">?</button>
-  </div>
   
   <canvas id="myCanvas" width="1000" height="600"></canvas>
+  
+  <div style="text-align:center;">
+  <a class="github-link" href="https://github.com/jefferyz2008/Isomer_Enumerator_Backend" target="_blank">
+    🌿 View Code on GitHub
+  </a>
+</div>
 
   <script src="renderer.js"></script>
   <script>
@@ -114,6 +139,7 @@
     async function fetchMolecules(formula) {
       try {
         const response = await fetch(`http://127.0.0.1:8000/molecule?moleculeName=${encodeURIComponent(formula)}`);
+
         return await response.json();
       } catch (err) {
         console.error("Failed to fetch bonds:", err);
@@ -129,7 +155,11 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.textAlign="center"
       ctx.fillText("thinking...", canvas.width/2, canvas.height/2);
-      ctx.fillText(`generating ${name}`,canvas.width/2,canvas.height/2+50)
+      ctx.fillText(`generating ${name}...`,canvas.width/2,canvas.height/2+50)
+      if (getLength(name)>=9)
+      {
+          ctx.fillText("This might take a while...",canvas.width/2,canvas.height/2+100)
+      }
 
       currentMolecule = await fetchMolecules(name);
 
@@ -273,5 +303,7 @@
   </script>
 </body>
 </html>
+
+
 
 
