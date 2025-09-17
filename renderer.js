@@ -16,7 +16,17 @@ function getDistance(x1, y1, x2, y2) {
     const dy = y2 - y1;
     return Math.sqrt(dx * dx + dy * dy);
 }
-
+function getLength(moleculeName) {
+    let totalAtoms = 0;
+    for (let char of moleculeName) {   // iterate over characters
+        if (/\d/.test(char)) {         // regex check for digit
+            totalAtoms += parseInt(char, 10);
+        } else {
+            totalAtoms += 1;
+        }
+    }
+    return totalAtoms;
+}
 //drawing the molecule
 function drawAtom(atom,coords,ctx){
     //draws an atom given its symbol and coordinates
