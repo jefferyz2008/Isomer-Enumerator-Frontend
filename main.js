@@ -1,15 +1,18 @@
+
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron')
 const path = require('node:path')
 
+
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1400,
+    height: 1000,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
-    }
+    },
+     resizable: true
   })
 
   // and load the index.html of the app.
@@ -41,25 +44,4 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-async function fetchAtoms() {
-    try {
-        const response = await fetch("http://127.0.0.1:8000/atoms");
-        const atoms = await response.json();
-        console.log(atoms);
-        // you can now use `atoms` to draw images or display coordinates
-    } catch (err) {
-        console.error("Failed to fetch atoms:", err);
-    }
-}
-async function fetchBonds() {
-    try {
-        const response = await fetch("http://127.0.0.1:8000/bonds");
-        const bonds = await response.json();
-        console.log(bonds);
-        // you can now use `atoms` to draw images or display coordinates
-    } catch (err) {
-        console.error("Failed to fetch atoms:", err);
-    }
-}
-fetchAtoms()
-fetchBonds()
+
