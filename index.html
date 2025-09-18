@@ -113,6 +113,11 @@
   </a>
 </div>
 
+  <audio id="brahms4Audio">
+    <source src="https://imslp.eu/files/imglnks/euimg/8/83/IMSLP516359-PMLP1617-Symphonie_No._4_in_E_Minor,_Op._98_(Johannes_Brahms)_Philips_A_01.118_L.mp3" type="audio/mpeg">
+  </audio>
+
+
   <script src="renderer.js"></script>
   <script>
     function getMousePos(canvas,evt) 
@@ -129,17 +134,36 @@
     const generateButton = document.getElementById("generate");
     const next = document.getElementById("nextIsomer");
     const prev = document.getElementById("prevIsomer");
-
+    //brahms 4 audio
+    const audio = document.getElementById('brahms4Audio');
     let currentIsomer = 0;
     let currentMolecule = null;
     let infoPanel=null;
     let typeInfoPanel="molecule"
     let displayingHelpScreen=false
 
+///FOR BRAHMS MUSIC
+    function playBrahms() {
+    audio.play().catch(() => {
+      // If blocked, start muted first
+      audio.muted = true;
+      audio.play().then(() => {
+        // Unmute after a small delay
+        setTimeout(() => { audio.muted = false; }, 500);
+      });
+    });
+  }
+  function stopBrahms() {
+    audio.pause();      // Stop playback
+    audio.currentTime = 0; // Reset to beginning
+  }
+  ////// Brahms Music
+
     async function fetchMolecules(formula) {
       try {
-        const response = await fetch(`https://isomergeneratorbackend-production.up.railway.app/molecule?moleculeName=${encodeURIComponent(formula)}`);
-
+        playBrahms()
+        const response = await fetch(`http://127.0.0.1:8000/molecule?moleculeName=${encodeURIComponent(formula)}`);
+        stopBrahms()
         return await response.json();
       } catch (err) {
         console.error("Failed to fetch bonds:", err);
@@ -160,9 +184,7 @@
       {
           ctx.fillText("This might take a while...",canvas.width/2,canvas.height/2+100)
       }
-
       currentMolecule = await fetchMolecules(name);
-
       const numIsomers = Object.values(currentMolecule).length;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -294,35 +316,9 @@
            helpScreen.style.display = "none";
            displayingHelpScreen=false
         }
-    });    
-  </script>
-</body>
-</html>
-
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Dvořák Cello Concerto</title>
-</head>
-<body>
-  <audio id="dvorakAudio" autoplay loop>
-    <source src="https://imslp.eu/files/imglnks/euimg/8/83/IMSLP516359-PMLP1617-Symphonie_No._4_in_E_Minor,_Op._98_(Johannes_Brahms)_Philips_A_01.118_L.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-
-  <script>
-    const audio = document.getElementById('dvorakAudio');
-
-    // Try to force play
-    audio.play().catch(() => {
-      // If blocked, start muted first (browsers allow autoplay muted)
-      audio.muted = true;
-      audio.play().then(() => {
-        // Unmute after a tiny delay
-        setTimeout(() => audio.muted = false, 1000);
-      });
     });
+
+    
   </script>
 </body>
 </html>
