@@ -161,9 +161,10 @@
 
     async function fetchMolecules(formula) {
       try {
-        playBrahms()
-        const response = await fetch(`http://127.0.0.1:8000/molecule?moleculeName=${encodeURIComponent(formula)}`);
-        stopBrahms()
+        playBrahms();
+        const response = await fetch(`https://isomergeneratorbackend-production.up.railway.app/molecule?moleculeName=${encodeURIComponent(formula)}`);
+
+        stopBrahms();
         return await response.json();
       } catch (err) {
         console.error("Failed to fetch bonds:", err);
@@ -238,6 +239,7 @@
     }
 
     generateButton.addEventListener("click", () => {
+      stopBrahms();
       currentMolecule=null
       currentIsomer = 0;
       drawMolecule(input.value);
