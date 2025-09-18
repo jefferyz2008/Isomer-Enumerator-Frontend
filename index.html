@@ -294,12 +294,35 @@
            helpScreen.style.display = "none";
            displayingHelpScreen=false
         }
+    });    
+  </script>
+</body>
+</html>
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dvořák Cello Concerto</title>
+</head>
+<body>
+  <audio id="dvorakAudio" autoplay loop>
+    <source src="https://imslp.eu/files/imglnks/euimg/8/83/IMSLP516359-PMLP1617-Symphonie_No._4_in_E_Minor,_Op._98_(Johannes_Brahms)_Philips_A_01.118_L.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const audio = document.getElementById('dvorakAudio');
+
+    // Try to force play
+    audio.play().catch(() => {
+      // If blocked, start muted first (browsers allow autoplay muted)
+      audio.muted = true;
+      audio.play().then(() => {
+        // Unmute after a tiny delay
+        setTimeout(() => audio.muted = false, 1000);
+      });
     });
-
-
-
-    
-    
   </script>
 </body>
 </html>
