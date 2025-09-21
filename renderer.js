@@ -48,7 +48,7 @@ function drawAllAtoms(allAtoms,ctx){
         drawAtom(allAtoms[key],key,ctx)
     }
 }
-function drawBond(type, orientation,coords,ctx)
+function drawBond(type, orientation,length,coords,ctx)
 {   
     newCoords=strToIntCoords(coords)
     centerX=newCoords[0]
@@ -59,33 +59,44 @@ function drawBond(type, orientation,coords,ctx)
     ctx.font="30px 'JetBrains Mono'"
     ctx.textAlign="center"
     ctx.textBaseline="middle"
+    ctx.translate(centerX, centerY);  
     if (orientation==="|")
     {
-        ctx.translate(centerX, centerY);   
+        if (length)
+        {
+          ctx.scale(1, 4);
+        } 
         ctx.rotate(Math.PI/2)
         ctx.fillText(text,0,0)
         ctx.restore()
         return
     }
-     ctx.fillText(text,centerX,centerY)
-     ctx.restore()
+    if (length)
+    {
+        ctx.scale(4,1);
+    }
+    ctx.fillText(text,0,0);
+    ctx.restore()
+    return
 }
 
 function drawAllBonds(allBonds,ctx){
     for (coord in allBonds)
     {
-        drawBond(allBonds[coord][0],allBonds[coord][1],coord,ctx)
+        const bond=allBonds[coord];
+        len=false;
+        if (bond.length==3)
+        {
+            len=true;
+        }
+        else
+        {
+            len=false;
+        }
+        drawBond(bond[0],bond[1],len,coord,ctx);
     }
 }
 
-
-function drawAllLonePairs(allLonePairs,ctx)
-{
-       for (coord in allLonePairs)
-       {
-        drawLonePair(allLonePairs[coord][0],allLonePairs[coord][1],coord,ctx)
-       }
-}
 function drawInfo(info, ctx) {
     ctx.save();
 
@@ -124,9 +135,9 @@ function drawInfo(info, ctx) {
     ctx.quadraticCurveTo(startX - rectWidth, startY, startX - rectWidth + radius, startY);
     ctx.closePath();
 
-    ctx.fill();  // <-- fill only, no stroke
+    ctx.fill();  
 
-    // Draw text
+   
     ctx.fillStyle = "#333";
     let yPos = startY + padding;
     for (const text of lines) {
@@ -144,4 +155,5 @@ function drawInfo(info, ctx) {
 function clearInfoPanel(ctx, rect) {
     ctx.clearRect(rect.x, rect.y, rect.width, rect.height);
 }
+
 
